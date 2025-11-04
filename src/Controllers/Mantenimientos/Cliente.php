@@ -49,13 +49,51 @@ class Cliente extends PublicController
             if ($this->isPostBack()) {
                 $this->errores = $this->validarPostData();
                 if (count($this->errores) === 0) {
-                    switch ($this->mode) {
-                        case "INS":
-                            //Llamar a Dao para Ingresar
-                        case "UPD":
-                            //Llamar a Dao para Actualizar
-                        case "DEL":
-                            //Llamar a Dao para Eliminar
+                    try {
+                        switch ($this->mode) {
+                            case "INS":
+                                //Llamar a Dao para Ingresar
+                                $affectedRows = DAOClientes::crearCliente(
+                                    $this->codigo,
+                                    $this->nombre,
+                                    $this->direccion,
+                                    $this->correo,
+                                    $this->telefono,
+                                    $this->estado,
+                                    $this->evaluacion
+                                );
+                                if ($affectedRows > 0) {
+                                    Site::redirectToWithMsg(ClientesList, "Nuevo Cliente creado satisfactoriamente.");
+                                }
+                                break;
+                            case "UPD":
+                                //Llamar a Dao para Actualizar
+                                 $affectedRows = DAOClientes::actualizarCliente(
+                                    $this->codigo,
+                                    $this->nombre,
+                                    $this->direccion,
+                                    $this->correo,
+                                    $this->telefono,
+                                    $this->estado,
+                                    $this->evaluacion
+                                );
+                                if ($affectedRows > 0) {
+                                    Site::redirectToWithMsg(ClientesList, "Cliente actualizado satisfactoriamente.");
+                                }
+                                break;
+                            case "DEL":
+                                //Llamar a Dao para Eliminar
+                                $affectedRows = DAOClientes::eliminarCliente(
+                                    $this->codigo
+                                );
+                                if ($affectedRows > 0) {
+                                    Site::redirectToWithMsg(ClientesList, "Cliente eliminado satisfactoriamente.");
+                                }
+                                break;
+                        }
+                    } catch (Exception $err) {
+                        error_log($err, 0);
+                        $this->errores[] = $err;
                     }
                 }
             }
