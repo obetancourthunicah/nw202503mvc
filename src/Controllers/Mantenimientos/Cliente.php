@@ -2,7 +2,7 @@
 
 namespace Controllers\Mantenimientos;
 
-use Controllers\PublicController;
+use Controllers\PrivateController;
 use Utilities\Site;
 use Utilities\Validators;
 use Views\Renderer;
@@ -11,7 +11,12 @@ use Exception;
 
 const ClientesList = "index.php?page=Mantenimientos-Clientes";
 const ClientView = "mantenimientos/clientes/form";
-class Cliente extends PublicController
+
+const CLIENTES_FORM_INS = "mantenimiento_clientes_new";
+const CLIENTES_FORM_UPD = "mantenimiento_clientes_update";
+const CLIENTES_FORM_DEL = "mantenimiento_clientes_delete";
+
+class Cliente extends PrivateController
 {
     private $modes = [
         "INS" => "Nuevo Cliente",
@@ -134,6 +139,21 @@ class Cliente extends PublicController
             }
         } else {
             throw new Exception("Valor de Mode no es Válido");
+        }
+        if ($_GET["mode"] === "INS") {
+            if (!$this->isFeatureAutorized(CLIENTES_FORM_INS)) {
+                throw new Exception("No Tiene Autorizado crear nuevo Cliente");
+            }
+        }
+        if ($_GET["mode"] === "UPD") {
+            if (!$this->isFeatureAutorized(CLIENTES_FORM_UPD)) {
+                throw new Exception("No Tiene Autorizado editar Cliente");
+            }
+        }
+        if ($_GET["mode"] === "DEL") {
+            if (!$this->isFeatureAutorized(CLIENTES_FORM_DEL)) {
+                throw new Exception("No Tiene Autorizado eliminar Cliente");
+            }
         }
     }
 

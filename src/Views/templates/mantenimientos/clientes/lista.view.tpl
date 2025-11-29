@@ -12,7 +12,11 @@
                 <th>Correo</th>
                 <th>Estado</th>
                 <th>Nota</th>
-                <th><a href="index.php?page=Mantenimientos-Cliente&mode=INS">Nuevo</a></th>
+                <th>
+                    {{if mantenimiento_clientes_new}}
+                        <a href="index.php?page=Mantenimientos-Cliente&mode=INS">Nuevo</a>
+                    {{endif mantenimiento_clientes_new}}
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -26,8 +30,12 @@
                 <td>{{estado}}</td>
                 <td>{{grade}} | {{nota}}</td>
                 <td>
+                    {{if ~mantenimiento_clientes_update}}
                     <a href="index.php?page=Mantenimientos-Cliente&mode=UPD&codigo={{codigo}}">Editar</a>&nbsp;
+                    {{endif ~mantenimiento_clientes_update}}
+                    {{if ~mantenimiento_clientes_delete}}
                     <a href="index.php?page=Mantenimientos-Cliente&mode=DEL&codigo={{codigo}}">Eliminar</a>&nbsp;
+                    {{endif ~mantenimiento_clientes_delete}}
                     <a href="index.php?page=Mantenimientos-Cliente&mode=DSP&codigo={{codigo}}">Ver</a>
                 </td>
             </tr>

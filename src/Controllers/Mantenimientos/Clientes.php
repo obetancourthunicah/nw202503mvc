@@ -2,12 +2,16 @@
 
 namespace Controllers\Mantenimientos;
 
-use Controllers\PublicController;
+use Controllers\PrivateController;
 use Dao\Dao;
 use Views\Renderer;
 use Dao\Clientes\Clientes as ClienteDAO;
 
-class Clientes extends PublicController
+const CLIENTES_NEW = "mantenimiento_clientes_new";
+const CLIENTES_UPD = "mantenimiento_clientes_update";
+const CLIENTES_DEL = "mantenimiento_clientes_delete";
+
+class Clientes extends PrivateController
 {
 
     public function run(): void
@@ -37,6 +41,10 @@ class Clientes extends PublicController
         }
         $viewData["total"] = count($viewData["clientes"]);
         $viewData["totalNota"] = $totalNota;
+
+        $viewData[CLIENTES_NEW] = $this->isFeatureAutorized(CLIENTES_NEW);
+        $viewData[CLIENTES_UPD] = $this->isFeatureAutorized(CLIENTES_UPD);
+        $viewData[CLIENTES_DEL] = $this->isFeatureAutorized(CLIENTES_DEL);
 
         Renderer::render("mantenimientos/clientes/lista", $viewData);
     }
